@@ -3,7 +3,6 @@
 <head>
   <title>Hourly Stats Tracker</title>
   <style>
-    /* CSS styles */
 
     * {
       box-sizing: border-box;
@@ -57,7 +56,7 @@
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: red;
     }
 
     .hourly-stats {
@@ -146,9 +145,6 @@
       hourlyStats[valueKey] = value;
       localStorage.setItem(statKey, JSON.stringify(hourlyStats));
       alert("Value stored successfully.");
-
-      // Update the hourly stats display
-      updateHourlyStats();
     }
 
     function updateHourlyStats() {
@@ -199,8 +195,7 @@
         statsContainer.appendChild(statsItem);
       }
     }
-
-    // Initial update of hourly stats display
+    
     updateHourlyStats();
   </script>
 </body>
