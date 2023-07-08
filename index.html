@@ -3,7 +3,6 @@
 <head>
   <title>Hourly Stats Tracker</title>
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -39,24 +38,6 @@
     input[type="text"]:focus {
       outline: none;
       border-color: #4caf50;
-    }
-
-    button {
-      display: block;
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 16px;
-      background-color: #4caf50;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: red;
     }
 
     .hourly-stats {
@@ -103,17 +84,7 @@
     }
 
     .hourly-stats-item button {
-      font-size: 14px;
-      background-color: #4caf50;
-      color: #fff;
-      border: none;
-      padding: 5px 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .hourly-stats-item button:hover {
-      background-color: #45a049;
+      display: none;
     }
 
     @keyframes fadeIn {
@@ -127,7 +98,6 @@
       }
     }
   </style>
-  <script src="script.js"></script>
 </head>
 <body>
 
@@ -139,9 +109,10 @@
   </div>
 
   <script>
+
     function storeValue(hour, valueKey, value) {
       const statKey = `hourlyStat_${hour}`;
-      const hourlyStats = JSON.parse(localStorage.getItem(statKey)) || {};
+      let hourlyStats = JSON.parse(localStorage.getItem(statKey)) || {};
       hourlyStats[valueKey] = value;
       localStorage.setItem(statKey, JSON.stringify(hourlyStats));
       alert("Value stored successfully.");
@@ -156,7 +127,7 @@
         const endHour = (hour + 1).toString().padStart(2, "0");
 
         const statKey = `hourlyStat_${startHour}`;
-        const hourlyStats = JSON.parse(localStorage.getItem(statKey)) || {};
+        let hourlyStats = JSON.parse(localStorage.getItem(statKey)) || {};
 
         const statsItem = document.createElement("div");
         statsItem.classList.add("hourly-stats-item");
@@ -167,9 +138,9 @@
         const inputLivePerson = document.createElement("input");
         inputLivePerson.type = "text";
         inputLivePerson.value = hourlyStats.LivePerson || "";
-        inputLivePerson.onblur = function () {
+        inputLivePerson.oninput = function () {
           const value = inputLivePerson.value;
-          storeValue(hour, "LivePerson", value);
+          storeValue(startHour, "LivePerson", value);
         };
 
         const labelOrbit = document.createElement("label");
@@ -178,24 +149,20 @@
         const inputOrbit = document.createElement("input");
         inputOrbit.type = "text";
         inputOrbit.value = hourlyStats.Orbit || "";
-        inputOrbit.onblur = function () {
+        inputOrbit.oninput = function () {
           const value = inputOrbit.value;
-          storeValue(hour, "Orbit", value);
+          storeValue(startHour, "Orbit", value);
         };
-
-        const saveButton = document.createElement("button");
-        saveButton.textContent = "Save";
 
         statsItem.appendChild(labelLivePerson);
         statsItem.appendChild(inputLivePerson);
         statsItem.appendChild(labelOrbit);
         statsItem.appendChild(inputOrbit);
-        statsItem.appendChild(saveButton);
 
         statsContainer.appendChild(statsItem);
       }
     }
-    
+
     updateHourlyStats();
   </script>
 </body>
