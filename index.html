@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hourly Stats Tracker</title>
+  <style>
+    /* CSS styles */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 40px;
+      color: #333;
+    }
+
+    p {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #4caf50;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .hourly-stats {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .hourly-stats h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .hourly-stats-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .hourly-stats-item label {
+      margin-right: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .hourly-stats-item input {
+      width: 60px;
+      margin-right: 10px;
+      padding: 5px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: border-color 0.3s ease;
+    }
+
+    .hourly-stats-item input:focus {
+      outline: none;
+      border-color: #4caf50;
+    }
+
+    .hourly-stats-item button {
+      font-size: 14px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .hourly-stats-item button:hover {
+      background-color: #45a049;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <script src="script.js"></script>
+</head>
+<body>
+
+  <h1>Hourly Stats Tracker</h1>
+  <p>Enter LivePerson and Orbit values:</p>
+  <div class="hourly-stats">
+    <h2>Hourly Stats:</h2>
+    <div id="statsContainer"></div>
+  </div>
+
+  <script>
+    function storeValue(hour, valueKey, value) {
+      const statKey = `hourlyStat_${hour}`;
+      const hourlyStats = JSON.parse(localStorage.getItem(statKey)) || {};
+      hourlyStats[valueKey] = value;
+      localStorage.setItem(statKey, JSON.stringify(hourlyStats));
+      alert("Value stored successfully.");
+
+      // Update the hourly stats display
+      updateHourlyStats();
+    }
+
+    function updateHourlyStats() {
+      const statsContainer = document.getElementById("statsContainer");
+      statsContainer.innerHTML = ""; // Clear the container
+
+      for (let hour = 9; hour <= 18; hour++) {
+        const startHour = hour.toString().padStart(2, "0");
+        const endHour = (hour + 1).toString().padStart(2, "0");
+
+        const statKey = `hourlyStat_${startHour}`;
+        const hourlyStats = JSON.parse(localStorage.getItem(statKey)) || {};
+
+        const statsItem = document.createElement("div");
+        statsItem.classList.add("hourly-stats-item");
+
+        const labelLivePerson = document.createElement("label");
+        labelLivePerson.textContent = `${startHour}:00 - ${endHour}:00 (LivePerson):`;
+
+        const inputLivePerson = document.createElement("input");
+        inputLivePerson.type = "text";
+        inputLivePerson.value = hourlyStats.LivePerson || "";
+        inputLivePerson.onblur = function () {
+          const value = inputLivePerson.value;
+          storeValue(hour, "LivePerson", value);
+        };
+
+        const labelOrbit = document.createElement("label");
+        labelOrbit.textContent = `${startHour}:00 - ${endHour}:00 (Orbit):`;
+
+        const inputOrbit = document.createElement("input");
+        inputOrbit.type = "text";
+        inputOrbit.value = hourlyStats.Orbit || "";
+        inputOrbit.onblur = function () {
+          const value = inputOrbit.value;
+          storeValue(hour, "Orbit", value);
+        };
+
+        const saveButton = document.createElement("button");
+        saveButton.textContent = "Save";
+
+        statsItem.appendChild(labelLivePerson);
+        statsItem.appendChild(inputLivePerson);
+        statsItem.appendChild(labelOrbit);
+        statsItem.appendChild(inputOrbit);
+        statsItem.appendChild(saveButton);
+
+        statsContainer.appendChild(statsItem);
+      }
+    }
+
+    // Initial update of hourly stats display
+    updateHourlyStats();
+  </script>
+</body>
+</html>
