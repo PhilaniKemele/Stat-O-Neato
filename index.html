@@ -111,13 +111,17 @@
 
   <script>
 
-    function storeValue(hour, valueKey, value) {
-      const statKey = `hourlyStat_${hour}`;
-      let hourlyStats = JSON.parse(localStorage.getItem(statKey)) || {};
-      hourlyStats[valueKey] = value;
-      localStorage.setItem(statKey, JSON.stringify(hourlyStats));
-      alert("Value stored successfully.");
-    }
+    function storeValue(hour, valueKey, value) { 
+
+  const statKey = `hourlyStat_${hour}`; 
+
+  let hourlyStats = JSON.parse(localStorage.getItem(statKey)) || {}; 
+
+  hourlyStats[valueKey] = value; 
+
+  localStorage.setItem(statKey, JSON.stringify(hourlyStats)); 
+
+}
 
     function updateHourlyStats() {
       const statsContainer = document.getElementById("statsContainer");
